@@ -2,9 +2,8 @@ import csv
 import requests
 from urllib.parse import urljoin
 
-# baseUrl = "http://10.2.110.61/api/"
-baseUrl = "localhost:3000/api/"
-filename = "seed.csv"
+baseUrl = ""
+filename = ""
 
 def sendDataToServer(data):
     r = requests.post(urljoin(baseUrl, 'msgs'), data=data)
@@ -28,14 +27,14 @@ def main():
             retryCounter += 1
 
         rowCounter += 1
+        # if rowCounter > 20:
+        #     break
 
     csvFile.close()
 
 
 if __name__ == "__main__":
-    # filename = input("Filename : ")
-    # baseUrl = input(
-    #     "Base URL with trailing / (e.g. http://10.2.110.61/api/) : ")
-    baseUrl = "http://localhost:3000/api/"
-    filename = "seed.csv"
+    baseUrl = "http://54.202.87.52:3000/api/"
+    #baseUrl = "http://localhost:3000/api/"
+    filename = "../midterm-data/seed.csv"
     main()
