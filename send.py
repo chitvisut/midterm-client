@@ -5,9 +5,36 @@ from urllib.parse import urljoin
 baseUrl = ""
 filename = ""
 
-def sendDataToServer(data):
-    r = requests.post(urljoin(baseUrl, 'messages'), data=data)
-    return (r.status_code == 201, r.json())
+
+def deleteMessage(data):
+    # print(data['action'], urljoin(baseUrl, urljoin('messages/', data['uuid'])))
+    return requests.delete(urljoin(baseUrl, urljoin('messages/', data['uuid'])))
+
+
+def updateMessage(data):
+    # print(urljoin(baseUrl, urljoin(
+    #     'messages/', data['uuid'])))
+    dataToSend = {
+        'author': data['author'],
+        'message': data['message'],
+        'likes': int(data['likes']),
+    }
+
+    return requests.put(urljoin(baseUrl, urljoin(
+        'messages/', data['uuid'])), json=dataToSend)
+    # return (r.status_code == 204, r.text)
+
+
+def createMessage(data):
+    dataToSend = {
+        'uuid': data['uuid'],
+        'author': data['author'],
+        'message': data['message'],
+        'likes': int(data['likes']),
+    }
+
+    return requests.post(urljoin(baseUrl, 'messages'), json=dataToSend)
+    # return (r.status_code == 201, r.text)
 
 
 def main():
@@ -17,24 +44,46 @@ def main():
     for row in reader:
         retryCounter = 0
         while True:
-            (sendOk, returnMessage) = sendDataToServer(row)
-            if sendOk:
-                print("Row", rowCounter, "sent!")
-                break
-            else:
-                print("Row", rowCounter, "failed to send :", returnMessage)
-                print("retry:", retryCounter)
-            retryCounter += 1
+            if retryCounter == 10:
+                raise Exception("Message failed to send")
 
+            if row['action'] == 'create':
+                response = createMessage(row)
+                if response.status_code == 201 or response.status_code == 409:
+                    print("Row", rowCounter, "sent!")
+                    break
+                else:
+                    print("Row", rowCounter, "failed to send",
+                          response.status_code, ":", response.text)
+
+            if row['action'] == 'update':
+                response = updateMessage(row)
+                if response.status_code == 204:
+                    print("Row", rowCounter, "sent!")
+                    break
+                elif response.status_code == 404:
+                    raise Exception("UUID not found")
+                else:
+                    print("Row", rowCounter, "failed to send",
+                          response.status_code, ":", response.text)
+
+            if row['action'] == 'delete':
+                response = deleteMessage(row)
+                if response.status_code == 204 or response.status_code == 404:
+                    print("Row", rowCounter, "sent!")
+                    break
+                else:
+                    print("Row", rowCounter, "failed to send",
+                          response.status_code, ":", response.text)
+
+            retryCounter += 1
         rowCounter += 1
-        if rowCounter > 20:
-            break
 
     csvFile.close()
 
 
 if __name__ == "__main__":
-    #baseUrl = "http://54.202.87.52:3000/api/"
-    baseUrl = "http://localhost:3000/api/"
-    filename = "../midterm-data/seed.csv"
+    filename = input("Filename : ")
+    baseUrl = input(
+        "Base URL with trailing / (e.g. http://10.2.110.61/api/) : ")
     main()
