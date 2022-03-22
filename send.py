@@ -83,7 +83,9 @@ def main():
 
 
 if __name__ == "__main__":
-    filename = input("Filename : ")
-    baseUrl = input(
-        "Base URL with trailing / (e.g. http://10.2.110.61/api/) : ")
+    # filename = input("Filename : ")
+    # baseUrl = input(
+    #     "Base URL with trailing / (e.g. http://10.2.110.61/api/) : ")
+    filename = "sample.csv"
+    baseUrl = "http://localhost:3000/api/"
     main()

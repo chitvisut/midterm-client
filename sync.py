@@ -147,8 +147,6 @@ def main():
 
 if __name__ == "__main__":
     #remall_tolite()
-    if sys.argv:
-        server_url = sys.argv[1]
     print("connect to "+server_url)
     main()
 
