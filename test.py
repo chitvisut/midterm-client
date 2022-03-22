@@ -12,9 +12,22 @@ cur.execute(''' CREATE TABLE data (
                         uuid TEXT PRIMARY KEY UNIQUE,
                         author TEXT NOT NULL,
                         message TEXT NOT NULL,
-                        likes INTEGER NOT NULL,
+                        likes INTEGER NOT NULL
+                        )''')
+
+cur.execute(''' CREATE TABLE count (
+                        mark TEXT PRIMARY KEY UNIQUE,
                         count INTEGER NOT NULL
                         )''')
+
+cur.execute("INSERT INTO count VALUES ('current', 0)")
+con.commit()
+
+# sql = "UPDATE count SET count = ? WHERE mark = 'current'"
+# values = [0]
+# cur.execute(sql, values)
+# con.commit()
+
 
 # sql = """INSERT INTO data (uuid, author, message, likes, count) VALUES (?, ?, ?, ?, ?)"""
 
@@ -30,8 +43,8 @@ cur.execute(''' CREATE TABLE data (
 
 # con.commit()
 
-# # rows =  cur.execute('SELECT * FROM data')
-# print(list(rows))
+rows =  cur.execute('SELECT * FROM count')
+print(list(rows)[0][1])
 
 con.close()
 

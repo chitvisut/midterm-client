@@ -3,6 +3,7 @@ import csv
 from urllib.parse import urljoin
 import json
 
+#server_url = "http://54.202.87.52:3000/api/"
 server_url = "http://localhost:3000/api/"
 
 #mockup
