@@ -27,14 +27,12 @@ def main():
             retryCounter += 1
 
         rowCounter += 1
-        if rowCounter > 20:
-            break
 
     csvFile.close()
 
 
 if __name__ == "__main__":
-    #baseUrl = "http://54.202.87.52:3000/api/"
-    baseUrl = "http://localhost:3000/api/"
+    baseUrl = "http://54.202.87.52:3000/api/"
+    #baseUrl = "http://localhost:3000/api/"
     filename = "../midterm-data/seed.csv"
     main()

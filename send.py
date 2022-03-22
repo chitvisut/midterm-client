@@ -49,6 +49,7 @@ def main():
 
             if row['action'] == 'create':
                 response = createMessage(row)
+                print(response.status_code)
                 if response.status_code == 201 or response.status_code == 409:
                     print("Row", rowCounter, "sent!")
                     break
@@ -58,6 +59,7 @@ def main():
 
             if row['action'] == 'update':
                 response = updateMessage(row)
+                print(response.status_code)
                 if response.status_code == 204:
                     print("Row", rowCounter, "sent!")
                     break
@@ -69,6 +71,7 @@ def main():
 
             if row['action'] == 'delete':
                 response = deleteMessage(row)
+                print(response.status_code)
                 if response.status_code == 204 or response.status_code == 404:
                     print("Row", rowCounter, "sent!")
                     break
@@ -86,6 +89,6 @@ if __name__ == "__main__":
     # filename = input("Filename : ")
     # baseUrl = input(
     #     "Base URL with trailing / (e.g. http://10.2.110.61/api/) : ")
-    filename = "sample.csv"
-    baseUrl = "http://localhost:3000/api/"
+    filename = "large-test.csv"
+    baseUrl = "http://54.202.87.52:3000/api/"
     main()
